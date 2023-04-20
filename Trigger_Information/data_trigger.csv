@@ -1,10 +1,10 @@
-User,Type,Contents,Time Period (Minutes),
-Data Trigger Fin 1,Text,Text 1,15,
-Data Trigger Fin 1,Image,Script 1,15,
-Data Trigger Fin 1,Image,Script 2,15,
-Data Trigger Fin 2,Text,Text 2,15,
-Data Trigger Fin 2,Image,Script 2,15,
-Data Trigger Fin 2,Image,Script 3,15,
-Data Trigger Fin 3,Text,Text 3,15,
-Data Trigger Fin 3,Image,Script 3,15,
-Data Trigger Fin 3,Image,Script 4,15,
+User,Type,Contents,Time Period (Minutes)
+Data Trigger Fin 1,Text,This Is Process Data Monitoring Fin 1 ,15
+Data Trigger Fin 1,Image,C:\Users\Admin\Desktop\Personal Documents\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Script File\Data Fin 1-1,15
+Data Trigger Fin 1,Image,Script 2,15
+Data Trigger Fin 2,Text,Text 2,15
+Data Trigger Fin 2,Image,Script 2,15
+Data Trigger Fin 2,Image,Script 3,15
+Data Trigger Fin 3,Text,Text 3,15
+Data Trigger Fin 3,Image,Script 3,15
+Data Trigger Fin 3,Image,Script 4,15
