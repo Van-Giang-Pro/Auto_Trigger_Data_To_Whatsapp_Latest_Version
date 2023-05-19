@@ -1,3 +1,4 @@
-User,Text,Image,Time Period (Minutes)
-Data Trigger Fin 1,This Is Process Data Monitoring Fin 1 ,C:\Users\Admin\Desktop\Personal Documents\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Script File\Data Fin 1-1,15
-Data Trigger Fin 2,This Is Process Data Monitoring Fin 2,C:\Users\Admin\Desktop\Personal Documents\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Script File\Data Fin 1-2,15
+User,Text,Image,Period,Data Description
+Data Trigger Fin 1,This Is Process Data Monitoring Fin 1 ,C:\Users\Admin\Desktop\Personal Documents\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Script File\Data Fin 1-1,15,Silicone Alarm Data
+Data Trigger Fin 2,This Is Process Data Monitoring Fin 2,C:\Users\Admin\Desktop\Personal Documents\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Script File\Data Fin 1-2,15,Pairing Alarm Data
+Data Trigger Fin 1,This Is Process Data Monitoring Fin 1 ,C:\Users\Admin\Desktop\Personal Documents\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Script File\Data Fin 1-2,15,Tape Alarm Data
