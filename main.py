@@ -23,23 +23,23 @@ class Whatsapp:
         self.trigger_path = trigger_path
         self.user_dict_list = []
         # Set Up For Personal Laptop
-        driver_path = r"C:\Users\Admin\Desktop\Personal Documents" \
-                      r"\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-                      r"\Chrome_Driver\chromedriver.exe"
+        # driver_path = r"C:\Users\Admin\Desktop\Personal Documents" \
+        #               r"\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
+        #               r"\Chrome_Driver\chromedriver.exe"
         # Set Up For Company Laptop
-        # driver_path = r"C:\Users\fs120806\PycharmProjects" \
-        #               r"Auto_Trigger_Data_To_Whatsapp_Latest_Version\Chrome_Driver" \
-        #               r"\chromedriver.exe"
+        driver_path = r"C:\Users\fs120806\PycharmProjects" \
+                      r"Auto_Trigger_Data_To_Whatsapp_Latest_Version\Chrome_Driver" \
+                      r"\chromedriver.exe"
         # Set Up For Home PC
         # driver_path = r"C:\Users\admin\PycharmProjects" \
         #               r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
         #               r"\Chrome_Driver\chromedriver.exe"
         # Set Up For Personal Laptop
-        chrome_directory = r"user-data-dir=C:\Users\Admin\AppData" \
-                           r"\Local\Google\Chrome\User_Data_For_Auto_Trigger_System"
+        # chrome_directory = r"user-data-dir=C:\Users\Admin\AppData" \
+        #                    r"\Local\Google\Chrome\User_Data_For_Auto_Trigger_System"
         # Set Up For Company Laptop
-        # chrome_directory = r"user-data-dir=C:\Users\fs120806\AppData\Local\Google\Chrome" \
-        #                    r"\User_Data_For_Auto_Trigger_System"
+        chrome_directory = r"user-data-dir=C:\Users\fs120806\AppData\Local\Google\Chrome" \
+                           r"\User_Data_For_Auto_Trigger_System"
         # Set Up For Home PC
         # chrome_directory = r"user-data-dir=C:\Users\admin\AppData\Local\Google" \
         #                    r"\Chrome\User_Data_For_Auto_Trigger_System"
@@ -69,21 +69,20 @@ class Whatsapp:
 						'Period': (df.iloc[i]).loc['Period'],
                         'Data Description': (df.iloc[i]).loc['Data Description']}
                 self.user_dict_list.append(user)
-                print(self.user_dict_list)
+            print(self.user_dict_list)
 
     def send_message_and_image(self, image_path_folder):
-        image_list = os.listdir(image_path_folder)
         # Create folder for each user to make a buffer memory for storing the image
-        list_folder = []
+        image_path = []
+        image_list = os.listdir(image_path_folder)
+        image_path_area = []
         for val in self.user_dict_list:
-            if val['User'] in list_folder:
-                continue
-            else:
-                list_folder.append(val['User'])
             area_folder_path = os.path.join(image_path_folder, val['User'])
             if not os.path.exists(area_folder_path):
 	            os.makedirs(area_folder_path)
-        print(list_folder)
+        for i in range(len(image_list)):
+            image_path_area.append(os.path.join(image_path_folder, image_list[i]))
+        print(image_path_area)
         # Send message and image to each user
         for user in self.user_dict_list:
             self.search_box.clear()
@@ -112,34 +111,35 @@ class Whatsapp:
 
 
 class CreateImage:
-	def __inti__(self):
-		self.sql_file_path = sql_file_path
-		jmp_file_path = jmp_file_path
+	def __inti__(self, script_folder_path):
+		self.script_folder_path = script_folder_path
 
 
 if __name__ == '__main__':
 	# Set Up For Personal Laptop
-	trigger_path = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
+	# trigger_path = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
+	#                r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
+	#                r"\Trigger_Information\data_trigger.csv"
+	# Set Up For Company Laptop
+	trigger_path = (r"C:\Users\fs120806\PycharmProjects" \
 	                r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-	                r"\Trigger_Information\data_trigger.csv"
-
-	# Set Up For Company Laptop
-	# trigger_path = (r"C:\Users\fs120806\PycharmProjects" \
-	#                 r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-	#                 r"\Trigger_Information\data_trigger.csv")
-
+	                r"\Trigger_Information\data_trigger.csv")
+	# Set Up For Home PC
+	# trigger_path = r"C:\Users\admin\PycharmProjects" \
+	#                r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
+	#                r"\Trigger_Information\data_trigger.csv"
 	# Set Up For Personal Laptop
-	image_path_folder = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
-						 "\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
-
+	# image_path_folder = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
+	# 					  r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
 	# Set Up For Company Laptop
-	# image_path_folder = (r"C:\Users\fs120806\PycharmProjects" \
-	#                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image\Giang.png")
-
+	image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
+	                    r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
+	# Set Up For Home PC
+	# image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
+	#                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
 	url = "https://web.whatsapp.com/"
 	whatsapp = Whatsapp(url, trigger_path)
 	whatsapp.send_message_and_image(image_path_folder=image_path_folder)
-	# whatsapp.run_script_export_image()
 
 
 
