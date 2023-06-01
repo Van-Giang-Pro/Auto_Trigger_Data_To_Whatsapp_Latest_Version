@@ -65,16 +65,15 @@ class Whatsapp:
             df = pd.read_csv(file)
             for i in range(len(df.index)):
                 user = {'User': (df.iloc[i]).loc['User'],
-						'Text': (df.iloc[i]).loc['Text'],
-						'Image Folder': (df.iloc[i]).loc['Image Folder'],
-						'Script Folder': (df.iloc[i]).loc['Script Folder'],
+                        'Text': (df.iloc[i]).loc['Text'],
+                        'Image Folder': (df.iloc[i]).loc['Image Folder'],
+                        'Script Folder': (df.iloc[i]).loc['Script Folder'],
                         'SQL Folder': (df.iloc[i]).loc['SQL Folder'],
                         'Period': (df.iloc[i]).loc['Period'],
                         'Data Description': (df.iloc[i]).loc['Data Description']}
                 self.user_dict_list.append(user)
-            print(self.user_dict_list)
-
-    def send_message_and_image(self, image_path_folder):
+                print("Raw Data Read From Trigger File Information")
+                print(self.user_dict_list[i])
         # Create folder for each user to make a buffer memory for storing the image
         # Scan and check file in foler is empty or not. Request to add files if it is empty
         current_folder_path = os.getcwd()
@@ -82,104 +81,118 @@ class Whatsapp:
         script_folder = os.path.join(current_folder_path, 'Script')
         sql_folder = os.path.join(current_folder_path, 'SQL')
         if not os.path.exists(image_folder):
-	        os.makedirs(image_folder)
-	        os.getcwd()
-	        for i in range(len(self.user_dict_list)):
-		        os.makedirs(self.user_dict_list[i]['Image Folder'])
+            os.makedirs(image_folder)
+            os.getcwd()
+            for i in range(len(self.user_dict_list)):
+                os.makedirs(self.user_dict_list[i]['Image Folder'])
         if not os.path.exists(script_folder):
-	        os.makedirs(script_folder)
-	        os.getcwd()
-	        for i in range(len(self.user_dict_list)):
-		        os.makedirs(self.user_dict_list[i]['Script Folder'])
+            os.makedirs(script_folder)
+            os.getcwd()
+            for i in range(len(self.user_dict_list)):
+                os.makedirs(self.user_dict_list[i]['Script Folder'])
         if not os.path.exists(sql_folder):
-	        os.makedirs(sql_folder)
-	        os.getcwd()
-	        for i in range(len(self.user_dict_list)):
-		        os.makedirs(self.user_dict_list[i]['SQL Folder'])
+            os.makedirs(sql_folder)
+            os.getcwd()
+            for i in range(len(self.user_dict_list)):
+                os.makedirs(self.user_dict_list[i]['SQL Folder'])
         popup = input("Please Add All Files To SQL Folder And Script Then Typing Yes To Continue: ")
         if popup.lower() == 'no':
-	        print("Please Add All Files To SQL Folder And Script")
-	        sys.exit()
+            print("Please Add All Files To SQL Folder And Script")
+            sys.exit()
         elif popup.lower() == 'yes':
-	        for i in range(len(self.user_dict_list)):
-		        script_folder_path = self.user_dict_list[i]['Script Folder']
-		        if (os.listdir(script_folder_path) == []):
-			        print(f"Please Add All Files To Script Folder for {self.user_dict_list[i]['User'] + ' ' + self.user_dict_list[i]['Data Description']}")
-		        else:
-			        print(f"Script Folder For {self.user_dict_list[i]['User'] + ' ' + self.user_dict_list[i]['Data Description']} Is Ready")
-	        for i in range(len(self.user_dict_list)):
-		        sql_folder_path = self.user_dict_list[i]['SQL Folder']
-		        if (os.listdir(sql_folder_path) == []):
-			        print(f"Please Add All Files To SQL Folder {self.user_dict_list[i]['User'] + ' ' + self.user_dict_list[i]['Data Description']}")
-		        else:
-			        print(f"SQL Folder For {self.user_dict_list[i]['User'] + ' ' + self.user_dict_list[i]['Data Description']} Is Ready")
+            check_script_id = 0
+            check_sql_id = 0
+            for i in range(len(self.user_dict_list)):
+                script_folder_path = self.user_dict_list[i]['Script Folder']
+                sql_folder_path = self.user_dict_list[i]['SQL Folder']
+                if not os.listdir(script_folder_path):
+                    print(f"Please Add All Files To Script Folder for {self.user_dict_list[i]['User'] + ' '}"
+                          f"{self.user_dict_list[i]['Data Description']}")
+                    sys.exit()
+                else:
+                    print(f"Script Folder For {self.user_dict_list[i]['User'] + ' '}"
+                          f"{self.user_dict_list[i]['Data Description']} Is Ready")
+                if not os.listdir(sql_folder_path):
+                    print(f"Please Add All Files To SQL Folder {self.user_dict_list[i]['User'] + ' '}"
+                          f"{self.user_dict_list[i]['Data Description']}")
+                    sys.exit()
+                else:
+                    print(f"SQL Folder For {self.user_dict_list[i]['User'] + ' '}"
+                          f"{self.user_dict_list[i]['Data Description']} Is Ready")
         else:
-	        print("Please Type Yes Or No")
+            print("Please Type Yes Or No And Run The Program Again")
+            sys.exit()
+        print("All Files Are Loaded And Ready To Send To User")
+        print("Start Program To Send Message And Image To User")
+        time.sleep(5)
 
-        # for i in range(len(image_folder_list)):
-        #     image_folder_path_area.append(os.path.join(image_path_folder, image_folder_list[i]))
-        # for i in range(len(image_folder_path_area)): # Count number of folder in image folder
-        #     for j in range(len(os.listdir(image_folder_path_area[i]))): # Count number of image in each folder
-        #         image_path.append(os.path.join(image_folder_path_area[i], (os.listdir(image_folder_path_area[i])[j])))
-        # print(image_folder_path_area)
-        # print(image_path)
-        # # Send message and image to each user
-        # for user in self.user_dict_list:
-        #     self.search_box.clear()
-        #     self.search_box.click()
-        #     self.search_box.send_keys(user['User'])
-        #     self.search_box.send_keys(Keys.ENTER)
-        #     print("Start Sending Message To {0}".format(user['User']))
-        #     message_box = self.wait.until(EC.presence_of_element_located((By.XPATH, Whatsapp.message_box_xpath)))
-        #     message_box.clear()
-        #     message_box.click()
-        #     message_box.send_keys(user['Text'] + '\n' + user['Data Description'])
-        #     time.sleep(1) # Wait for the message to be sent
-        #     message_box.send_keys(Keys.ENTER)
-        #     time.sleep(3)
-        #     print("Start Sending Image To {0}".format(user['User']))
-        #     for i in range(len(image_path)):
-        #         image_path = os.path.join(image_path_folder, image_path[i])  # Get the image path
-        #         attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH, self.attachment_icon_xpath)))
-        #         attachment_icon.click()
-        #         image_attachment = self.wait.until(EC.presence_of_element_located((By.XPATH, self.image_attachment_xpath)))
-        #         image_attachment.send_keys(image_path[i])
-        #         time.sleep(1)  # Wait for the image to be uploaded
-        #         send_image_button = self.wait.until(EC.presence_of_element_located((By.XPATH, self.send_button_xpath)))
-        #         send_image_button.click()
-        #         time.sleep(3)
-
-
-# class CreateImage:
-# 	def __inti__(self, script_folder_path):
-# 		self.script_folder_path = script_folder_path
+    def send_message_and_image(self, image_path_folder):
+        image_folder_list = os.listdir(image_path_folder)
+        image_folder_path_area = []
+        image_path = []
+        user_image_path = {}
+        for i in range(len(image_folder_list)): # Count number of folder in image folder
+            image_folder_path_area.append(os.path.join(image_path_folder, image_folder_list[i]))
+            if not os.listdir(image_folder_path_area[i]):
+                print(f"No Images Files In Folder {image_folder_path_area[i]}")
+        for j in range(len(image_folder_path_area)): # Count number of image in each folder
+            for k in range(len(os.listdir(image_folder_path_area[j]))):
+                    image_path.append(os.path.join(image_folder_path_area[j], (os.listdir(image_folder_path_area[j])[k])))
+        print("List Of Folder In Image Folder")
+        print(image_folder_path_area)
+        print("Path Of All Images In Every Folder")
+        print(image_path)
+        # Send message and image to each user
+        for user in self.user_dict_list:
+            self.search_box.clear()
+            self.search_box.click()
+            self.search_box.send_keys(user['User'])
+            self.search_box.send_keys(Keys.ENTER)
+            print("Start Sending Message To {0}".format(user['User']))
+            message_box = self.wait.until(EC.presence_of_element_located((By.XPATH, Whatsapp.message_box_xpath)))
+            message_box.clear()
+            message_box.click()
+            message_box.send_keys(user['Text'] + '\n' + user['Data Description'])
+            time.sleep(1) # Wait for the message to be sent
+            message_box.send_keys(Keys.ENTER)
+            time.sleep(3)
+            print("Start Sending Image To {0}".format(user['User']))
+            for i in range(len(image_path)):
+                attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH, self.attachment_icon_xpath)))
+                attachment_icon.click()
+                image_attachment = self.wait.until(EC.presence_of_element_located((By.XPATH, self.image_attachment_xpath)))
+                image_attachment.send_keys(image_path[i])
+                time.sleep(1)  # Wait for the image to be uploaded
+                send_image_button = self.wait.until(EC.presence_of_element_located((By.XPATH, self.send_button_xpath)))
+                send_image_button.click()
+                time.sleep(3)
 
 
 if __name__ == '__main__':
-	# Set Up For Personal Laptop
-	trigger_path = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
-	               r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-	               r"\Trigger_Information\data_trigger.csv"
-	# Set Up For Company Laptop
-	# trigger_path = (r"C:\Users\fs120806\PycharmProjects" \
-	#                 r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-	#                 r"\Trigger_Information\data_trigger.csv")
-	# Set Up For Home PC
-	# trigger_path = r"C:\Users\admin\PycharmProjects" \
-	#                r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-	#                r"\Trigger_Information\data_trigger.csv"
-	# Set Up For Personal Laptop
-	image_path_folder = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
-						  r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version"
-	# Set Up For Company Laptop
-	# image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
-	#                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
-	# Set Up For Home PC
-	# image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
-	#                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
-	url = "https://web.whatsapp.com/"
-	whatsapp = Whatsapp(url, trigger_path)
-	whatsapp.send_message_and_image(image_path_folder=image_path_folder)
+    # Set Up For Personal Laptop
+    trigger_path = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
+                   r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
+                   r"\Trigger_Information\data_trigger.csv"
+    # Set Up For Company Laptop
+    # trigger_path = (r"C:\Users\fs120806\PycharmProjects" \
+    #                 r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
+    #                 r"\Trigger_Information\data_trigger.csv")
+    # Set Up For Home PC
+    # trigger_path = r"C:\Users\admin\PycharmProjects" \
+    #                r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
+    #                r"\Trigger_Information\data_trigger.csv"
+    # Set Up For Personal Laptop
+    image_path_folder = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
+                          r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
+    # Set Up For Company Laptop
+    # image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
+    #                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
+    # Set Up For Home PC
+    # image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
+    #                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
+    url = "https://web.whatsapp.com/"
+    whatsapp = Whatsapp(url, trigger_path)
+    whatsapp.send_message_and_image(image_path_folder=image_path_folder)
 
 
 
