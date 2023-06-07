@@ -11,6 +11,8 @@ import pandas as pd
 import time
 import subprocess
 import sys
+import socket
+
 
 
 class Whatsapp:
@@ -23,27 +25,20 @@ class Whatsapp:
         self.url = url
         self.trigger_path = trigger_path
         self.user_dict_list = []
-        # Set Up For Personal Laptop
-        driver_path = r"C:\Users\Admin\Desktop\Personal Documents" \
-                      r"\Python Project\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-                      r"\Chrome_Driver\chromedriver.exe"
-        # Set Up For Company Laptop
-        # driver_path = r"C:\Users\fs120806\PycharmProjects" \
-        #               r"Auto_Trigger_Data_To_Whatsapp_Latest_Version\Chrome_Driver" \
-        #               r"\chromedriver.exe"
-        # Set Up For Home PC
-        # driver_path = r"C:\Users\admin\PycharmProjects" \
-        #               r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-        #               r"\Chrome_Driver\chromedriver.exe"
-        # Set Up For Personal Laptop
-        chrome_directory = r"user-data-dir=C:\Users\Admin\AppData" \
-                           r"\Local\Google\Chrome\User_Data_For_Auto_Trigger_System"
-        # Set Up For Company Laptop
-        # chrome_directory = r"user-data-dir=C:\Users\fs120806\AppData\Local\Google\Chrome" \
-        #                    r"\User_Data_For_Auto_Trigger_System"
-        # Set Up For Home PC
-        # chrome_directory = r"user-data-dir=C:\Users\admin\AppData\Local\Google" \
-        #                    r"\Chrome\User_Data_For_Auto_Trigger_System"
+        driver_path = os.getcwd() + "\Chrome_Driver\chromedriver.exe"
+        print(socket.gethostname())
+        if socket.gethostname() == "My-Personal-PC":
+            print("Running Under My Personal PC")
+            chrome_directory = r"user-data-dir=C:\Users\Admin\AppData" \
+                               r"\Local\Google\Chrome\User_Data_For_Auto_Trigger_System"
+        elif socket.gethostname() == "FS-35826":
+            print("Running Under Company Laptop")
+            chrome_directory = r"user-data-dir=C:\Users\fs120806\AppData\Local\Google\Chrome" \
+                               r"\User_Data_For_Auto_Trigger_System"
+        else:
+            print("Running Under Home PC")
+            chrome_directory = r"user-data-dir=C:\Users\admin\AppData\Local\Google" \
+                               r"\Chrome\User_Data_For_Auto_Trigger_System"
         # Access To Whatsapp
         self.chrome_options = Options()
         self.chrome_options.add_argument(chrome_directory)
@@ -72,8 +67,8 @@ class Whatsapp:
                         'Period': (df.iloc[i]).loc['Period'],
                         'Data Description': (df.iloc[i]).loc['Data Description']}
                 self.user_dict_list.append(user)
-                print("Raw Data Read From Trigger File Information")
-                print(self.user_dict_list[i])
+        print("Raw Data Read From Trigger File Information")
+        print(self.user_dict_list)
         # Create folder for each user to make a buffer memory for storing the image
         # Scan and check file in foler is empty or not. Request to add files if it is empty
         current_folder_path = os.getcwd()
@@ -129,67 +124,64 @@ class Whatsapp:
     def send_message_and_image(self, image_path_folder):
         image_folder_list = os.listdir(image_path_folder)
         image_folder_path_area = []
-        image_path = []
-        user_image_path = {}
         for i in range(len(image_folder_list)): # Count number of folder in image folder
             image_folder_path_area.append(os.path.join(image_path_folder, image_folder_list[i]))
             if not os.listdir(image_folder_path_area[i]):
                 print(f"No Images Files In Folder {image_folder_path_area[i]}")
-        for j in range(len(image_folder_path_area)): # Count number of image in each folder
-            for k in range(len(os.listdir(image_folder_path_area[j]))):
-                    image_path.append(os.path.join(image_folder_path_area[j], (os.listdir(image_folder_path_area[j])[k])))
-        print("List Of Folder In Image Folder")
-        print(image_folder_path_area)
-        print("Path Of All Images In Every Folder")
-        print(image_path)
+        # for j in range(len(image_folder_path_area)): # Count number of image in each folder
+        #     for k in range(len(os.listdir(image_folder_path_area[j]))):
+        #             image_path.append(os.path.join(image_folder_path_area[j], (os.listdir(image_folder_path_area[j])[k])))
+        # user_and_image_path = {}
+        # for i in range(len(self.user_dict_list)):
+        #     user_and_image_path.setdefault(self.user_dict_list[i]['User'], []).append(self.user_dict_list[i]['Text'] + " " + self.user_dict_list[i]['Data Description'])
+        #     for j in range (len(os.listdir(self.user_dict_list[i]['Image Folder']))):
+        #         user_and_image_path[self.user_dict_list[i]['User']].append(os.path.join(self.user_dict_list[i]['Image Folder'], (os.listdir(self.user_dict_list[i]['Image Folder'])[j])))
+        # print(user_and_image_path)
+        # user_and_image_path.[self.user_dict_list[i]['User']].append(os.path.join(self.user_dict_list[i]['Image Folder'], (os.listdir(self.user_dict_list[i]['Image Folder'])[j])))
+        # print("List Of Folder In Image Folder")
+        # print(image_folder_path_area)
+        # print("Path Of All Images In Every Folder Correcponding To User")
+        # print(user_and_image_path)
+        data = {}
+        user = []
+        for i in range(len(self.user_dict_list)):
+            user.append(self.user_dict_list[i]['User'])
+        for j in range(len(self.user_dict_list)):
+            data['Text'] = self.user_dict_list[j]['Text']
+            data['Data Description'] = self.user_dict_list[j]['Data Description']
+            data['Period'] = self.user_dict_list[j]['Period']
+            for k in range(len(os.listdir(self.user_dict_list[j]['Image Folder']))):
+                data['Image'] = os.path.join(self.user_dict_list[j]['Image Folder'], (os.listdir(self.user_dict_list[j]['Image Folder'])[k]))
+        user_data = dict.fromkeys(user, data)
+        print(user_data)
         # Send message and image to each user
-        for user in self.user_dict_list:
+        for key in user_data:
             self.search_box.clear()
             self.search_box.click()
-            self.search_box.send_keys(user['User'])
+            self.search_box.send_keys(key)
             self.search_box.send_keys(Keys.ENTER)
-            print("Start Sending Message To {0}".format(user['User']))
+            print("Start Sending Message To {0}".format(key))
             message_box = self.wait.until(EC.presence_of_element_located((By.XPATH, Whatsapp.message_box_xpath)))
             message_box.clear()
             message_box.click()
-            message_box.send_keys(user['Text'] + '\n' + user['Data Description'])
+            message_box.send_keys(user_data[key]['Text'] + '\n' + user_data[key]['Data Description'] + '\n' + "Time Period" + " " + str(user_data[key]['Period']))
             time.sleep(1) # Wait for the message to be sent
             message_box.send_keys(Keys.ENTER)
             time.sleep(3)
-            print("Start Sending Image To {0}".format(user['User']))
-            for i in range(len(image_path)):
-                attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH, self.attachment_icon_xpath)))
-                attachment_icon.click()
-                image_attachment = self.wait.until(EC.presence_of_element_located((By.XPATH, self.image_attachment_xpath)))
-                image_attachment.send_keys(image_path[i])
-                time.sleep(1)  # Wait for the image to be uploaded
-                send_image_button = self.wait.until(EC.presence_of_element_located((By.XPATH, self.send_button_xpath)))
-                send_image_button.click()
-                time.sleep(3)
+            print("Start Sending Image To {0}".format(key))
+            attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH, self.attachment_icon_xpath)))
+            attachment_icon.click()
+            image_attachment = self.wait.until(EC.presence_of_element_located((By.XPATH, self.image_attachment_xpath)))
+            image_attachment.send_keys(user_data[key]['Image'])
+            time.sleep(1)  # Wait for the image to be uploaded
+            send_image_button = self.wait.until(EC.presence_of_element_located((By.XPATH, self.send_button_xpath)))
+            send_image_button.click()
+            time.sleep(3)
 
 
 if __name__ == '__main__':
-    # Set Up For Personal Laptop
-    trigger_path = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
-                   r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-                   r"\Trigger_Information\data_trigger.csv"
-    # Set Up For Company Laptop
-    # trigger_path = (r"C:\Users\fs120806\PycharmProjects" \
-    #                 r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-    #                 r"\Trigger_Information\data_trigger.csv")
-    # Set Up For Home PC
-    # trigger_path = r"C:\Users\admin\PycharmProjects" \
-    #                r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version" \
-    #                r"\Trigger_Information\data_trigger.csv"
-    # Set Up For Personal Laptop
-    image_path_folder = r"C:\Users\Admin\Desktop\Personal Documents\Python Project" \
-                          r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
-    # Set Up For Company Laptop
-    # image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
-    #                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
-    # Set Up For Home PC
-    # image_path_folder = r"C:\Users\fs120806\PycharmProjects" \
-    #                     r"\Auto_Trigger_Data_To_Whatsapp_Latest_Version\Image"
+    trigger_path = os.getcwd() + "\Trigger_Information\data_trigger.csv"
+    image_path_folder = os.getcwd() + "\Image"
     url = "https://web.whatsapp.com/"
     whatsapp = Whatsapp(url, trigger_path)
     whatsapp.send_message_and_image(image_path_folder=image_path_folder)
