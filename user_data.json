@@ -3,27 +3,18 @@
     "User": "Data Trigger Fin 1",
     "Text": "This Is Process Data Monitoring Fin 1",
     "Data Description": "Silicone Alarm Data",
-    "Period": 15,
-    "Image Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\Image\\Data Trigger Fin 1_Silicone Alarm Data",
-    "Script Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\Script\\Data Trigger Fin 1_Silicone Alarm Data",
-    "SQL Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\SQL\\Data Trigger Fin 1_Silicone Alarm Data"
+    "Period": 15
   },
   "Data 2": {
-    "User": "Data Trigger Fin 1",
+    "User": "Data Trigger Fin 8",
     "Text": "This Is Process Data Monitoring Fin 1",
     "Data Description": "Tape Alarm Data",
-    "Period": 15,
-    "Image Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\Image\\Data Trigger Fin 1_Tape Alarm Data",
-    "Script Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\Script\\Data Trigger Fin 1_Tape Alarm Data",
-    "SQL Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\SQL\\Data Trigger Fin 1_Tape Alarm Data"
+    "Period": 15
   },
   "Data 3": {
     "User": "Data Trigger Fin 2",
     "Text": "This Is Process Data Monitoring Fin 2",
     "Data Description": "Pairing Alarm Data",
-    "Period": 15,
-    "Image Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\Image\\Data Trigger Fin 2_Pairing Alarm Data",
-    "Script Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\Script\\Data Trigger Fin 2_Pairing Alarm Data",
-    "SQL Folder": "C:\\Users\\Admin\\Desktop\\Personal Documents\\Python Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\SQL\\Data Trigger Fin 2_Pairing Alarm Data"
+    "Period": 15
   }
 }

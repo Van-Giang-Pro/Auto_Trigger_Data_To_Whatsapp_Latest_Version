@@ -12,7 +12,7 @@ import time
 import subprocess
 import sys
 import socket
-
+import json
 
 
 class Whatsapp:
@@ -31,7 +31,7 @@ class Whatsapp:
             print("Running Under My Personal PC")
             chrome_directory = r"user-data-dir=C:\Users\Admin\AppData" \
                                r"\Local\Google\Chrome\User_Data_For_Auto_Trigger_System"
-        elif socket.gethostname() == "FS-35826":
+        elif socket.gethostname() == "FS-35828":
             print("Running Under Company Laptop")
             chrome_directory = r"user-data-dir=C:\Users\fs120806\AppData\Local\Google\Chrome" \
                                r"\User_Data_For_Auto_Trigger_System"
@@ -56,64 +56,76 @@ class Whatsapp:
         except TimeoutException:
             print("The Website Is Not Available Or The Internet Connection Is Not Stable")
             self.chrome_driver.quit()
-        with open(self.trigger_path, 'r') as file:
-            df = pd.read_csv(file)
-            for i in range(len(df.index)):
-                user = {'User': (df.iloc[i]).loc['User'],
-                        'Text': (df.iloc[i]).loc['Text'],
-                        'Image Folder': (df.iloc[i]).loc['Image Folder'],
-                        'Script Folder': (df.iloc[i]).loc['Script Folder'],
-                        'SQL Folder': (df.iloc[i]).loc['SQL Folder'],
-                        'Period': (df.iloc[i]).loc['Period'],
-                        'Data Description': (df.iloc[i]).loc['Data Description']}
-                self.user_dict_list.append(user)
+        with open('C:\\Users\\Admin\\Desktop\\Personal Documents\\Python '
+                  'Project\\Auto_Trigger_Data_To_Whatsapp_Latest_Version\\user_data.json') as json_file:
+            self.data = json.load(json_file)
         print("Raw Data Read From Trigger File Information")
-        print(self.user_dict_list)
+        print(self.data)
         # Create folder for each user to make a buffer memory for storing the image
         # Scan and check file in foler is empty or not. Request to add files if it is empty
         current_folder_path = os.getcwd()
         image_folder = os.path.join(current_folder_path, 'Image')
         script_folder = os.path.join(current_folder_path, 'Script')
         sql_folder = os.path.join(current_folder_path, 'SQL')
+        os.chdir(current_folder_path)
         if not os.path.exists(image_folder):
             os.makedirs(image_folder)
             os.getcwd()
-            for i in range(len(self.user_dict_list)):
-                os.makedirs(self.user_dict_list[i]['Image Folder'])
+        os.chdir(image_folder)
+        for user_data in self.data.keys():
+            if not os.path.exists(os.path.join(image_folder,
+                                               (self.data[user_data]['User'] + '_' + \
+                                                self.data[user_data]['Data Description']))):
+                os.makedirs(os.path.join(image_folder,
+                                               (self.data[user_data]['User'] + '_' + \
+                                                self.data[user_data]['Data Description'])))
+        os.chdir(current_folder_path)
         if not os.path.exists(script_folder):
             os.makedirs(script_folder)
             os.getcwd()
-            for i in range(len(self.user_dict_list)):
-                os.makedirs(self.user_dict_list[i]['Script Folder'])
+        os.chdir(script_folder)
+        for user_data in self.data.keys():
+            if not os.path.exists(os.path.join(script_folder,
+                                               (self.data[user_data]['User'] + '_' +
+                                                self.data[user_data]['Data Description']))):
+                os.makedirs(os.path.join(script_folder,
+                                               (self.data[user_data]['User'] + '_' +
+                                                self.data[user_data]['Data Description'])))
+        os.chdir(current_folder_path)
         if not os.path.exists(sql_folder):
             os.makedirs(sql_folder)
             os.getcwd()
-            for i in range(len(self.user_dict_list)):
-                os.makedirs(self.user_dict_list[i]['SQL Folder'])
+        os.chdir(sql_folder)
+        for user_data in self.data.keys():
+            if not os.path.exists(os.path.join(sql_folder,
+                                               (self.data[user_data]['User'] + '_' +
+                                                self.data[user_data]['Data Description']))):
+                os.makedirs(os.path.join(sql_folder,
+                                                (self.data[user_data]['User'] + '_' +
+                                                 self.data[user_data]['Data Description'])))
         popup = input("Please Add All Files To SQL Folder And Script Then Typing Yes To Continue: ")
         if popup.lower() == 'no':
             print("Please Add All Files To SQL Folder And Script")
+            self.chrome_driver.quit()
             sys.exit()
         elif popup.lower() == 'yes':
-            check_script_id = 0
-            check_sql_id = 0
-            for i in range(len(self.user_dict_list)):
-                script_folder_path = self.user_dict_list[i]['Script Folder']
-                sql_folder_path = self.user_dict_list[i]['SQL Folder']
-                if not os.listdir(script_folder_path):
-                    print(f"Please Add All Files To Script Folder for {self.user_dict_list[i]['User'] + ' '}"
-                          f"{self.user_dict_list[i]['Data Description']}")
-                    sys.exit()
-                else:
-                    print(f"Script Folder For {self.user_dict_list[i]['User'] + ' '}"
-                          f"{self.user_dict_list[i]['Data Description']} Is Ready")
-                if not os.listdir(sql_folder_path):
-                    print(f"Please Add All Files To SQL Folder {self.user_dict_list[i]['User'] + ' '}"
-                          f"{self.user_dict_list[i]['Data Description']}")
-                    sys.exit()
-                else:
-                    print(f"SQL Folder For {self.user_dict_list[i]['User'] + ' '}"
-                          f"{self.user_dict_list[i]['Data Description']} Is Ready")
+            for user_data in self.data.keys():
+                script_folder_path = os.path.join(current_folder_path, 'Script')
+                sql_folder_path = os.path.join(current_folder_path, 'SQL')
+                for file in os.listdir(script_folder_path):
+                    if not os.listdir(os.path.join(script_folder_path, file)):
+                        print(f"Please Add All Files To Script Folder for {file}")
+                        sys.exit()
+                        self.chrome_driver.quit()
+                    else:
+                        print(f"Script File For Folder {file} Is Ready")
+                for file in os.listdir(sql_folder_path):
+                    if not os.listdir(os.path.join(sql_folder_path, file)):
+                        print(f"Please Add All Files To SQL Folder {file}")
+                        sys.exit()
+                        self.chrome_driver.quit()
+                    else:
+                        print(f"SQL Folder For {file} Is Ready")
         else:
             print("Please Type Yes Or No And Run The Program Again")
             sys.exit()
@@ -128,55 +140,51 @@ class Whatsapp:
             image_folder_path_area.append(os.path.join(image_path_folder, image_folder_list[i]))
             if not os.listdir(image_folder_path_area[i]):
                 print(f"No Images Files In Folder {image_folder_path_area[i]}")
-        # for j in range(len(image_folder_path_area)): # Count number of image in each folder
-        #     for k in range(len(os.listdir(image_folder_path_area[j]))):
-        #             image_path.append(os.path.join(image_folder_path_area[j], (os.listdir(image_folder_path_area[j])[k])))
-        # user_and_image_path = {}
-        # for i in range(len(self.user_dict_list)):
-        #     user_and_image_path.setdefault(self.user_dict_list[i]['User'], []).append(self.user_dict_list[i]['Text'] + " " + self.user_dict_list[i]['Data Description'])
-        #     for j in range (len(os.listdir(self.user_dict_list[i]['Image Folder']))):
-        #         user_and_image_path[self.user_dict_list[i]['User']].append(os.path.join(self.user_dict_list[i]['Image Folder'], (os.listdir(self.user_dict_list[i]['Image Folder'])[j])))
-        # print(user_and_image_path)
-        # user_and_image_path.[self.user_dict_list[i]['User']].append(os.path.join(self.user_dict_list[i]['Image Folder'], (os.listdir(self.user_dict_list[i]['Image Folder'])[j])))
-        # print("List Of Folder In Image Folder")
-        # print(image_folder_path_area)
-        # print("Path Of All Images In Every Folder Correcponding To User")
-        # print(user_and_image_path)
-        data = {}
-        user = []
-        for i in range(len(self.user_dict_list)):
-            user.append(self.user_dict_list[i]['User'])
-        for j in range(len(self.user_dict_list)):
-            data['Text'] = self.user_dict_list[j]['Text']
-            data['Data Description'] = self.user_dict_list[j]['Data Description']
-            data['Period'] = self.user_dict_list[j]['Period']
-            for k in range(len(os.listdir(self.user_dict_list[j]['Image Folder']))):
-                data['Image'] = os.path.join(self.user_dict_list[j]['Image Folder'], (os.listdir(self.user_dict_list[j]['Image Folder'])[k]))
-        user_data = dict.fromkeys(user, data)
-        print(user_data)
         # Send message and image to each user
-        for key in user_data:
+        for user_data in self.data.keys():
             self.search_box.clear()
             self.search_box.click()
-            self.search_box.send_keys(key)
+            self.search_box.send_keys(self.data[user_data]['User'])
             self.search_box.send_keys(Keys.ENTER)
-            print("Start Sending Message To {0}".format(key))
+            print("Start Sending Message To {0}".format(self.data[user_data]['User']))
             message_box = self.wait.until(EC.presence_of_element_located((By.XPATH, Whatsapp.message_box_xpath)))
             message_box.clear()
             message_box.click()
-            message_box.send_keys(user_data[key]['Text'] + '\n' + user_data[key]['Data Description'] + '\n' + "Time Period" + " " + str(user_data[key]['Period']))
+            message_box.send_keys(self.data[user_data]['Text'] + '\n' +
+                                  self.data[user_data]['Data Description'] + '\n' + "Time Period" + " " +
+                              str(self.data[user_data]['Period']))
             time.sleep(1) # Wait for the message to be sent
             message_box.send_keys(Keys.ENTER)
             time.sleep(3)
-            print("Start Sending Image To {0}".format(key))
-            attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH, self.attachment_icon_xpath)))
-            attachment_icon.click()
-            image_attachment = self.wait.until(EC.presence_of_element_located((By.XPATH, self.image_attachment_xpath)))
-            image_attachment.send_keys(user_data[key]['Image'])
-            time.sleep(1)  # Wait for the image to be uploaded
-            send_image_button = self.wait.until(EC.presence_of_element_located((By.XPATH, self.send_button_xpath)))
-            send_image_button.click()
-            time.sleep(3)
+            print("Start Sending Image To {0}".format(self.data[user_data]['User']))
+            if os.listdir(os.path.join(image_path_folder, (self.data[user_data]['User'] + "_" +
+                                                           self.data[user_data]['Data Description']))):
+                for image in os.listdir(os.path.join(image_path_folder, (self.data[user_data]['User'] + "_" +
+                                                                         self.data[user_data]['Data Description']))):
+                    image_path = os.path.join(image_path_folder, os.path.join((self.data[user_data]['User'] + "_" +
+                                                                               self.data[user_data]['Data Description']), image))
+                    attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH,
+                                      self.attachment_icon_xpath)))
+                    attachment_icon.click()
+                    image_attachment = self.wait.until(EC.presence_of_element_located((By.XPATH,
+                                       self.image_attachment_xpath)))
+                    image_attachment.send_keys(image_path)
+                    time.sleep(1)  # Wait for the image to be uploaded
+                    send_image_button = self.wait.until(EC.presence_of_element_located((By.XPATH,
+                                        self.send_button_xpath)))
+                    send_image_button.click()
+                    time.sleep(3)
+            else:
+                print(f"No Image In Folder {self.data[user_data]['User'] + '_' + self.data[user_data]['Data Description']}")
+                self.search_box.clear()
+                self.search_box.click()
+                message_box = self.wait.until(EC.presence_of_element_located((By.XPATH, Whatsapp.message_box_xpath)))
+                message_box.clear()
+                message_box.click()
+                message_box.send_keys("Data Is Empty")
+                time.sleep(1)  # Wait for the message to be sent
+                message_box.send_keys(Keys.ENTER)
+                time.sleep(3)
 
 
 if __name__ == '__main__':
