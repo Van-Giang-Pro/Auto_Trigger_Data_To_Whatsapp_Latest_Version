@@ -115,19 +115,20 @@ class Whatsapp:
                 for file in os.listdir(script_folder_path):
                     if not os.listdir(os.path.join(script_folder_path, file)):
                         print(f"Please Add All Files To Script Folder for {file}")
-                        sys.exit()
                         self.chrome_driver.quit()
+                        sys.exit()
                     else:
                         print(f"Script File For Folder {file} Is Ready")
                 for file in os.listdir(sql_folder_path):
                     if not os.listdir(os.path.join(sql_folder_path, file)):
                         print(f"Please Add All Files To SQL Folder {file}")
-                        sys.exit()
                         self.chrome_driver.quit()
+                        sys.exit()
                     else:
                         print(f"SQL Folder For {file} Is Ready")
         else:
             print("Please Type Yes Or No And Run The Program Again")
+            self.chrome_driver.quit()
             sys.exit()
         print("All Files Are Loaded And Ready To Send To User")
         print("Start Program To Send Message And Image To User")
@@ -159,10 +160,13 @@ class Whatsapp:
             print("Start Sending Image To {0}".format(self.data[user_data]['User']))
             if os.listdir(os.path.join(image_path_folder, (self.data[user_data]['User'] + "_" +
                                                            self.data[user_data]['Data Description']))):
-                for image in os.listdir(os.path.join(image_path_folder, (self.data[user_data]['User'] + "_" +
-                                                                         self.data[user_data]['Data Description']))):
-                    image_path = os.path.join(image_path_folder, os.path.join((self.data[user_data]['User'] + "_" +
-                                                                               self.data[user_data]['Data Description']), image))
+                for image in os.listdir(os.path.join(image_path_folder,
+                                                     (self.data[user_data]['User'] + "_" +
+                                                      self.data[user_data]['Data Description']))):
+                    image_path = os.path.join(image_path_folder,
+                                              os.path.join((
+                                                      self.data[user_data]['User'] + "_" +
+                                                      self.data[user_data]['Data Description']), image))
                     attachment_icon = self.wait.until(EC.presence_of_element_located((By.XPATH,
                                       self.attachment_icon_xpath)))
                     attachment_icon.click()
@@ -175,7 +179,8 @@ class Whatsapp:
                     send_image_button.click()
                     time.sleep(3)
             else:
-                print(f"No Image In Folder {self.data[user_data]['User'] + '_' + self.data[user_data]['Data Description']}")
+                print(f"No Image In Folder "
+                      f"{self.data[user_data]['User'] + '_' + self.data[user_data]['Data Description']}")
                 self.search_box.clear()
                 self.search_box.click()
                 message_box = self.wait.until(EC.presence_of_element_located((By.XPATH, Whatsapp.message_box_xpath)))
@@ -186,6 +191,15 @@ class Whatsapp:
                 message_box.send_keys(Keys.ENTER)
                 time.sleep(3)
 
+    def delete_image_folder_buffer(self, image_path_folder):
+    # Delete all image in image buffer folder
+    # Prepare for next run with new image in image buffer folder
+        for i in range(len(os.listdir(image_path_folder))):
+            image_folder_path = os.path.join(image_path_folder, os.listdir(image_path_folder)[i])
+            if os.listdir(image_folder_path):
+                for image in os.listdir(image_folder_path):
+                    os.remove(os.path.join(image_folder_path, image))
+
 
 if __name__ == '__main__':
     trigger_path = os.getcwd() + "\Trigger_Information\data_trigger.csv"
@@ -193,6 +207,9 @@ if __name__ == '__main__':
     url = "https://web.whatsapp.com/"
     whatsapp = Whatsapp(url, trigger_path)
     whatsapp.send_message_and_image(image_path_folder=image_path_folder)
+    whatsapp.delete_image_folder_buffer(image_path_folder=image_path_folder)
+    # Bypass quiting chrome driver for testing
+    # whatsapp.chrome_driver.quit()
 
 
 
