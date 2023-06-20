@@ -1,0 +1,22 @@
+SELECT SitePlant = '__SelectedSite__'
+    ,Cast(ReadTime AS DATETIME) ReadTime
+    ,Left(EquipmentName, 6) EquipmentName
+    ,SubId
+    ,SideName
+    ,GlassToBead1
+    ,GlassToBead2
+    ,GlassToBead3
+    ,GlassToBead4
+    ,GlassToBead5
+    ,GlassToBead6
+    ,GlassToBead7
+FROM ODS.mfg.ProcessHistoryEdgeSealInspectionShortEdge
+WHERE ReadTime BETWEEN '__StartTime__' AND '__EndTime__'
+    AND (GlassToBead1 > 1.6
+    OR GlassToBead2 > 1.6
+    OR GlassToBead3 > 1.6
+    OR GlassToBead4 > 1.6
+    OR GlassToBead5 > 1.6
+    OR GlassToBead6 > 1.6
+    OR GlassToBead7 > 1.6)
+    ORDER BY ReadTime DESC;

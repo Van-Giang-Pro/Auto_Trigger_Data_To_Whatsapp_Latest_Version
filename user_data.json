@@ -22,5 +22,11 @@
     "Text": "This Is Process Data Monitoring Fin 5",
     "Data Description": "Screw Alarm Data",
     "Period": 15
+  },
+    "Data 5": {
+    "User": "Data Trigger Fin 6",
+    "Text": "This Is Process Data Monitoring Fin 6",
+    "Data Description": "Screw Alarm Data",
+    "Period": 15
   }
 }
